@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
+import org.eclipse.gef.commands.CommandStack;
+
 import chessclient.enums.ColorPlayer;
 import chessclient.enums.GameResult;
 import chessclient.enums.Pieces;
@@ -17,7 +19,11 @@ import chessclient.enums.Reason;
  * 
  *
  * */
+
+
 public class Board extends Observable{
+	
+	
 	Map<String, Square> squares;
 
 	private Pieces promotionPiece;
@@ -29,8 +35,25 @@ public class Board extends Observable{
 	private GameResult gameResult;
 
 	public void resetBoard() {
+		
+		
+		
+		
 	}
 
+	public Board(){
+		/* create the board */
+		for(int h=0;h<8;h++){
+			for(int v=0;v<8;v++){
+				String s = ""+('a'+h)+v;
+				//System.out.println(s);
+				boolean isWhite = (h+v)%2 == 1;
+				Square square = new Square(isWhite);
+			}
+		}
+		/* put the pieces on */
+		resetBoard();
+	}
 	public void setFEN(String fen) {
 		/** TODO implement method * */
 
@@ -130,5 +153,8 @@ public class Board extends Observable{
 		this.turn = turn;
 	}
 
+	public void printBoard(){
+		/* prints the board to standard output */
+	}
 	
 }
