@@ -62,7 +62,7 @@ public class Board extends Observable {
 
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		for (int v = 0; v < MAXVERTICAL; v++) {
+		for (int v = MAXVERTICAL-1; v>-1; v--) {
 			for (int h = 0; h < MAXHORIZONTAL; h++) {
 				String s = "" + (char) ('a' + h) + (v + 1);
 				Square square = squares.get(s);
