@@ -1,5 +1,9 @@
 package chessclient.model;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+
+
 
 
 /* mdch: This class represents a square on the board
@@ -10,7 +14,18 @@ public class Square {
 	private String name;
 	private Piece occupier = null;
 	private int number = 0;
+	private Point location;
+	private Dimension size;
 	
+	public Dimension getSize() {
+		return size;
+	}
+	public void setSize(Dimension size) {
+		this.size = size;
+	}
+	public Point getLocation() {
+		return location;
+	}
 	public Square(Boolean isWhite,String name,int number){
 		this.name = name;
 		setIsWhite(isWhite);
@@ -53,5 +68,9 @@ public class Square {
 	
 	public boolean isEmpty(){
 		return getOccupier() == null;
+	}
+	public void setLocation(Point locationFor) {
+		this.location = locationFor;
+		
 	}
 }
