@@ -2,30 +2,65 @@ package chessclient.model;
 
 import java.util.Set;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+
 public abstract class Piece {
 	private boolean isWhite;
 
 	private Board board;
 
-	private Square location;
-	private String notation ="";
+	private Square square;
+
+	private String notation = "";
+
+	/* information for the graphical location/size */
+	private Point location;
+
+	private Dimension size;
+
 	/**
 	 * the piece needs the board to determine its possible moves
 	 */
-	Piece(Board board, Square location, boolean isWhite,String notation) {
+	Piece(Board board, Square square, boolean isWhite, String notation) {
 		this.board = board;
-		this.location = location;
+		this.square = square;
 		this.isWhite = isWhite;
 		this.notation = notation;
 	}
 
-	public Square getLocation() {
+	public Dimension getSize() {
+		return size;
+	}
+
+	public void setSize(Dimension dimension) {
+		this.size = dimension;
+	}
+
+	public String getNotation() {
+		return notation;
+	}
+
+	public void setNotation(String notation) {
+		this.notation = notation;
+	}
+
+	public void setLocation(Point location) {
+		this.location = location;
+	}
+
+	public void setSquare(Square square) {
+		this.square = square;
+	}
+
+	public Point getLocation() {
 		return location;
 	}
 
-	public Square getSquare(){
-		return getLocation();
+	public Square getSquare() {
+		return getSquare();
 	}
+
 	public void setBoard(Board board) {
 		this.board = board;
 	}
@@ -47,24 +82,24 @@ public abstract class Piece {
 	 * for check after a valid move is made, if it is check then undo the move
 	 */
 
-	public boolean moveTo(Square square) {
+	public boolean moveTo(Square destinationSquare) {
 		Set<Square> possibleMoves = getPossibleMoves();
-		if (!possibleMoves.contains(square)) {
+		if (!possibleMoves.contains(destinationSquare)) {
 			return false;
 		}
 
 		/* make move */
-		Square locationBackup = location;
-		location.clear();
-		location = square;
-		location.setOccupier(this);
+		Square previousSquare = square;
+		square.clear();
+		square = destinationSquare;
+		square.setOccupier(this);
 
 		/* check for check */
 		if (board.isCheck()) {
 			/* if check undo move and return false else return true */
-			location.clear();
-			location = locationBackup;
-			location.setOccupier(this);
+			square.clear();
+			square = previousSquare;
+			square.setOccupier(this);
 			return false;
 		}
 		/* since we got here, it must be a legal move */
@@ -72,7 +107,9 @@ public abstract class Piece {
 	}
 
 	public abstract Set<Square> getPossibleMoves();
-	public String toString(){
-		return isWhite()?notation.toUpperCase():notation.toLowerCase();
+
+	public String toString() {
+		return isWhite() ? notation.toUpperCase() : notation.toLowerCase();
 	}
+
 }

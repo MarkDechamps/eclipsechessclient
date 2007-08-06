@@ -8,6 +8,9 @@ import java.util.Observable;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
+
 import chessclient.enums.ColorPlayer;
 import chessclient.enums.GameResult;
 import chessclient.enums.Pieces;
@@ -38,6 +41,10 @@ public class Board extends Observable {
 
 	private GameResult gameResult;
 
+	private Dimension size;
+
+	private Point location;
+
 	public static Square int2Square(Board board, int fieldNumber) {
 		int v = fieldNumber % 10;
 		int h = fieldNumber / 10;
@@ -45,6 +52,9 @@ public class Board extends Observable {
 	}
 
 	public Board() {
+		
+		location = new Point(100,100);
+		size = new Dimension(500,500);
 		/* create the board */
 		for (int h = 0; h < MAXHORIZONTAL; h++) {
 			for (int v = 0; v < MAXVERTICAL; v++) {
@@ -414,6 +424,16 @@ public class Board extends Observable {
 		}
 		// if we get here, we are probably over an edge of the board
 		return SquareState.BAD;
+	}
+
+	public Dimension getSize() {
+		// TODO Auto-generated method stub
+		return size;
+	}
+
+	public Point getLocation() {
+		
+		return location;
 	}
 
 }

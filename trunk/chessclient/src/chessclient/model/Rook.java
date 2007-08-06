@@ -11,7 +11,7 @@ public class Rook extends Piece {
 	@Override
 	public Set<Square> getPossibleMoves() {
 		Board board = getBoard(); 
-		Square square = getLocation();
+		Square square = getSquare();
 		Set<Square> result = board.getSquaresAbove(square);
 		result.addAll(board.getSquaresLeftOf(square));
 		result.addAll(board.getSquaresRightOf(square));
