@@ -7,14 +7,21 @@ import java.util.Map;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FreeformLayer;
+import org.eclipse.draw2d.FreeformLayout;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.ScalableLayeredPane;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
+import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
+import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
+import org.eclipse.gef.requests.CreateRequest;
+import org.eclipse.gef.requests.SelectionRequest;
 
 import chessclient.model.Board;
 import chessclient.model.Square;
@@ -26,6 +33,8 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 
 	private Point location;
 
+	static private EditPart draggedPiece; //the piece in the air!, this is null when no piece is being dragged
+	
 	@Override
 	protected IFigure createFigure() {
 		/*
@@ -48,34 +57,38 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 			location = board.getLocation();
 		}
 
-		Figure layer = new FreeformLayer() {
-			@Override
-			public Rectangle getFreeformExtent() {
-				return new Rectangle(0,0,1024,768);
-			}
-
-			public void setFreeformBounds(Rectangle bounds) {
-				bounds.x = 0;
-				bounds.y = 0;
-				super.setFreeformBounds(bounds);
-			}
-		};
+		Figure layer = new ScalableLayeredPane();
 		layer.setBounds(new Rectangle(location.x, location.y, size.width,
 				size.height));
 		layer.setBackgroundColor(ColorConstants.gray);
 		layer.setOpaque(true);
-		layer.setLayoutManager(new XYLayout());
+		layer.setLayoutManager(new FreeformLayout());
 		return layer;
 
 	}
 
 	@Override
 	protected void createEditPolicies() {
-		//installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
-		//installEditPolicy("pieces nonresizableeditpolicy",
-			//	new NonResizableEditPolicy());
-		//XYLayout layout = (XYLayout) getContentPane().getLayoutManager();
-		//installEditPolicy("xylayoutpolixy", new PieceXYLayoutEditPolicy());
+		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new XYLayoutEditPolicy() {
+
+			@Override
+			protected Command getCreateCommand(CreateRequest request) {
+				System.out.println("BoardEditpart Create:"
+						+ request.getNewObject());
+
+				return new Command() {
+				};
+			}
+			
+
+			@Override
+			protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
+				return null;
+			}
+
+			
+		});
 		
 	}
 
@@ -115,14 +128,20 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 	private Point getLocationFor(int number) {
 
 		int multiplier = getSizeForSquare().width;
-		int x = (Board.MAXHORIZONTAL - (number / 10) - 1)
-		* multiplier;
-		int y = (Board.MAXVERTICAL - (number % 10) - 1)
-				* multiplier;
-		Board board = (Board)getModel();
-		x+= board.getLocation().x;
-		y+= board.getLocation().y;
-		Point location = new Point( x, y);
+		int x = ((number / 10)) * multiplier;
+		int y = (Board.MAXVERTICAL - (number % 10) - 1) * multiplier;
+		Board board = (Board) getModel();
+		x += board.getLocation().x;
+		y += board.getLocation().y;
+		Point location = new Point(x, y);
 		return location;
+	}
+
+	public static EditPart getDraggedPiece() {
+		return draggedPiece;
+	}
+
+	public static void setDraggedPiece(EditPart draggedPiece) {
+		BoardEditPart.draggedPiece = draggedPiece;
 	}
 }

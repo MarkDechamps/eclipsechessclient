@@ -53,7 +53,7 @@ public class Board extends Observable {
 
 	public Board() {
 		
-		location = new Point(100,100);
+		location = new Point(0,0);
 		size = new Dimension(500,500);
 		/* create the board */
 		for (int h = 0; h < MAXHORIZONTAL; h++) {
