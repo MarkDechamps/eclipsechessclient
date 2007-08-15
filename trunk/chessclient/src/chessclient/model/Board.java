@@ -242,6 +242,18 @@ public class Board extends Observable {
 		 * use the getReason method to determin why.
 		 */
 		/** TODO implement method * */
+		
+		if(source == destination){
+			return true;
+		}
+		Piece piece = source.getOccupier();
+		destination.setOccupier(piece);
+		if(piece!=null){
+			piece.setSquare(destination);
+		}
+		source.setOccupier(null);
+		setChanged();
+		notifyObservers();
 		return true;
 	}
 

@@ -58,7 +58,7 @@ public abstract class Piece {
 	}
 
 	public Square getSquare() {
-		return getSquare();
+		return square;
 	}
 
 	public void setBoard(Board board) {

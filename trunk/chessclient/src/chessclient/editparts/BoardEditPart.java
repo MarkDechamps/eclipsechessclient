@@ -60,7 +60,7 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 		Figure layer = new ScalableLayeredPane();
 		layer.setBounds(new Rectangle(location.x, location.y, size.width,
 				size.height));
-		layer.setBackgroundColor(ColorConstants.gray);
+		layer.setBackgroundColor(ColorConstants.darkGray);
 		layer.setOpaque(true);
 		layer.setLayoutManager(new FreeformLayout());
 		return layer;
@@ -80,7 +80,6 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 				return new Command() {
 				};
 			}
-			
 
 			@Override
 			protected Command createChangeConstraintCommand(EditPart child, Object constraint) {
@@ -138,10 +137,10 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 	}
 
 	public static EditPart getDraggedPiece() {
-		return draggedPiece;
+		return BoardEditPart.draggedPiece;
 	}
 
-	public static void setDraggedPiece(EditPart draggedPiece) {
-		BoardEditPart.draggedPiece = draggedPiece;
+	public static void setDraggedPiece(EditPart argDraggedPiece) {
+		BoardEditPart.draggedPiece = argDraggedPiece;
 	}
 }
