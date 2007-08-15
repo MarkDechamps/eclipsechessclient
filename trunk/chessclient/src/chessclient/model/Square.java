@@ -1,5 +1,7 @@
 package chessclient.model;
 
+import java.util.Observable;
+
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 
@@ -9,7 +11,7 @@ import org.eclipse.draw2d.geometry.Point;
 /* mdch: This class represents a square on the board
  * 
  * */
-public class Square {
+public class Square extends Observable{
 	private Boolean isWhite;	
 	private String name;
 	private Piece occupier = null;
@@ -45,8 +47,10 @@ public class Square {
 	public Piece getOccupier() {
 		return occupier;
 	}
-	public void setOccupier(Piece occupier) {
+	public void setOccupier(Piece occupier) {		
 		this.occupier = occupier;
+		setChanged();
+		notifyObservers(occupier);
 	}
 	
 	public String getName() {
@@ -72,5 +76,9 @@ public class Square {
 	public void setLocation(Point locationFor) {
 		this.location = locationFor;
 		
+	}
+	
+	public String toString(){
+		return name;
 	}
 }

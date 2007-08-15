@@ -1,6 +1,7 @@
 package chessclient.model;
 
 import java.util.Set;
+import java.util.TreeSet;
 
 public class King extends Piece{
 
@@ -11,8 +12,8 @@ public class King extends Piece{
 
 	@Override
 	public Set<Square> getPossibleMoves() {
-		// TODO Auto-generated constructor stub
-		return null;
+		Set<Square> possibleMoves = new TreeSet();
+		return possibleMoves;
 	}
 
 }
