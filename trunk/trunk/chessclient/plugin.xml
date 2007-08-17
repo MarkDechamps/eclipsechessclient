@@ -13,5 +13,27 @@
             id="chessclient.editors.BoardEditor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="chessclient"
+            name="Chessclient Console"/>
+      <view
+            category="chessclient"
+            class="chessclient.views.Console"
+            icon="icons/sample.gif"
+            id="chessclient.views.Console"
+            name="Console"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <view
+               id="chessclient.views.Console"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList"/>
+      </perspectiveExtension>
+   </extension>
 
 </plugin>
