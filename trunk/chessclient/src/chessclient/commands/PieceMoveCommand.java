@@ -17,8 +17,24 @@ public class PieceMoveCommand extends Command {
 	}
 
 	@Override
+	public boolean canExecute() {
+		if(oldSquare == newSquare){
+			return false;
+		}		
+		Piece killedPiece = newSquare.getOccupier();
+		if(killedPiece != null && (killedPiece.isWhite() == piece.isWhite())){
+			// we can not take our own pieces
+			return false;
+		}
+		
+		if(piece.getPossibleMoves().contains(newSquare)){
+			return true;
+		}else
+			return false;
+	}
+	@Override
 	public void execute() {
-		System.out.println("Execute piecemovecommand");
+		//System.out.println("Execute piecemovecommand");
 		oldSquare.clear();
 		piece.setSquare(newSquare);
 		newSquare.setOccupier(piece);

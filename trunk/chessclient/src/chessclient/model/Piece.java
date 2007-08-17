@@ -11,7 +11,7 @@ public abstract class Piece {
 	private Board board;
 
 	private Square square;
-
+	private Square startSquare;
 	private String notation = "";
 
 	/* information for the graphical location/size */
@@ -25,6 +25,7 @@ public abstract class Piece {
 	Piece(Board board, Square square, boolean isWhite, String notation) {
 		this.board = board;
 		this.square = square;
+		this.startSquare = square;
 		this.isWhite = isWhite;
 		this.notation = notation;
 	}
@@ -110,6 +111,14 @@ public abstract class Piece {
 
 	public String toString() {
 		return isWhite() ? notation.toUpperCase() : notation.toLowerCase();
+	}
+
+	protected Square getStartSquare() {
+		return startSquare;
+	}
+
+	protected void setStartSquare(Square startSquare) {
+		this.startSquare = startSquare;
 	}
 
 }

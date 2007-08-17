@@ -17,7 +17,7 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
 import org.eclipse.swt.graphics.Color;
 
-import chessclient.editpolicies.GameEditPolicy;
+import chessclient.editpolicies.ReparentXYLayoutEditPolicy;
 import chessclient.model.Piece;
 import chessclient.model.Square;
 
@@ -30,7 +30,7 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 
 	Color mouseOver;
 
-	boolean moveMade = false;
+	//boolean moveMade = false;
 
 	@Override
 	protected IFigure createFigure() {
@@ -53,7 +53,8 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 	@Override
 	protected void createEditPolicies() {
 
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new GameEditPolicy());
+		//installEditPolicy(EditPolicy.LAYOUT_ROLE, new GameEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ReparentXYLayoutEditPolicy());
 		installEditPolicy("nohandlesplease", new NonResizableEditPolicy(){
 			@Override
 			protected List createSelectionHandles() {
@@ -68,6 +69,7 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 				setDragAllowed(false);
 				super.activate();
 			}
+			
 		});
 
 	}
@@ -90,7 +92,7 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 	public void activate() {
 		Square square = (Square) getModel();
 		square.addObserver(this);
-		getContentPane().addMouseMotionListener(new MouseMotionListener() {
+		/*getContentPane().addMouseMotionListener(new MouseMotionListener() {
 
 			public void mouseDragged(MouseEvent me) {
 			}
@@ -114,7 +116,7 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 			public void mouseMoved(MouseEvent me) {
 
 			}
-		});
+		});*/
 
 		super.activate();
 	}
@@ -127,7 +129,7 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 	}
 
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("SquareEditpart does update");
+		//System.out.println("SquareEditpart does update");
 		//getParent().refresh();
 		
 		refresh();
@@ -143,12 +145,12 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 		
 	}
 
-	public boolean isMoveMade() {
-		return moveMade;
-	}
-
-	public void setMoveMade(boolean moveMade) {
-		this.moveMade = moveMade;
-	}
+//	public boolean isMoveMade() {
+//		return moveMade;
+//	}
+//
+//	public void setMoveMade(boolean moveMade) {
+//		this.moveMade = moveMade;
+//	}
 
 }

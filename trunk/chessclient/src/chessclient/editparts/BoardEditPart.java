@@ -33,7 +33,7 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 
 	private Point location;
 
-	static private EditPart draggedPiece; //the piece in the air!, this is null when no piece is being dragged
+	//static private EditPart draggedPiece; //the piece in the air!, this is null when no piece is being dragged
 	
 	@Override
 	protected IFigure createFigure() {
@@ -136,11 +136,11 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 		return location;
 	}
 
-	public static EditPart getDraggedPiece() {
-		return BoardEditPart.draggedPiece;
-	}
-
-	public static void setDraggedPiece(EditPart argDraggedPiece) {
-		BoardEditPart.draggedPiece = argDraggedPiece;
-	}
+//	public static EditPart getDraggedPiece() {
+//		return BoardEditPart.draggedPiece;
+//	}
+//
+//	public static void setDraggedPiece(EditPart argDraggedPiece) {
+//		BoardEditPart.draggedPiece = argDraggedPiece;
+//	}
 }
