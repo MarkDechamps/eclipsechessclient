@@ -18,7 +18,7 @@ import chessclient.enums.Reason;
 import chessclient.enums.SquareState;
 
 /* this is the root of the model
- * note: ! if the model changes, you MUST call 
+ * note: ! if you implement a method that changes the model , you MUST call 
  * setChanged() and notifyAll() otherwise the drawing will not be
  * updated
  * 
@@ -48,8 +48,11 @@ public class Board extends Observable {
 	public static Square int2Square(Board board, int fieldNumber) {
 		int v = fieldNumber % 10;
 		int h = fieldNumber / 10;
-		System.out.println("int2square getting:"+h + v);
-		return board.getSquares().get("" + h + v);
+		
+		/* we add 1 to v because chess boards don't start counting at 0*/
+		Square result =  board.getSquares().get("" + ((char)('a'+h)) + (v+1));
+		//System.out.println("int2square "+result);
+		return result;
 	}
 
 	public Board() {
@@ -63,7 +66,7 @@ public class Board extends Observable {
 				// System.out.println(s);
 				boolean isWhite = (h + v) % 2 == 1;
 				int number = h * 10 + v;
-				Square square = new Square(isWhite, s, number);
+				Square square = new Square(isWhite, s, number);				
 				squares.put(s, square);
 			}
 		}
@@ -379,21 +382,24 @@ public class Board extends Observable {
 		CHECKABOVE:
 		for (; v < MAXVERTICAL; v++) {
 			Square square = Board.int2Square(this, h * 10 + v);
+			System.out.println("board getsquaresabove "+v);
 			SquareState state = getSquareState(square, start);
 			switch (state) {
 			case BAD:
 				System.out.println("bad "+square);
 				break CHECKABOVE; // break out of the loop!
-			case GOOD:
+			case GOOD:// a good valid square
 				System.out.println("good "+square);
 				result.add(square);
 				break;
-			case GOOD_BUT_LAST_ONE:
+			case GOOD_BUT_LAST_ONE: // this means there is a piece on that square
 				System.out.println("good but last "+square);
 				result.add(square);
+				
 				return result;
 			}
 		}
+		
 		return result;
 	}
 	
@@ -454,9 +460,11 @@ public class Board extends Observable {
 				// king, it can be taken
 				// so it is a possible field
 				Piece piece = destination.getOccupier();
-				if ((piece.isWhite() == source.getOccupier().isWhite())
+				
+				if (piece!=null && (piece.isWhite() == source.getOccupier().isWhite())
 						|| piece instanceof King) {
-					// it's one of ours or its a king!
+					// it's one of ours or its a king and we don't take kings..no we don't!
+					System.out.println("Board bad square "+piece+" "+source.getOccupier());
 					return SquareState.BAD;
 				} else {
 					// its an opponents piece. If it is not his king, its a

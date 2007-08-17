@@ -16,6 +16,7 @@ public class Pawn extends Piece {
 		Board board = getBoard();
 		Square current = getSquare();
 		int number = current.getNumber();
+		
 		Set <Square> above = board.getSquaresAbove(current);
 		System.out.println("squares above this pawn:"+above);
 		// can we move one?
