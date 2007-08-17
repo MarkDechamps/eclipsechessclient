@@ -72,6 +72,8 @@ public class Square extends Observable {
 
 	public void clear() {
 		occupier = null;
+		setChanged();
+		notifyObservers();
 
 	}
 

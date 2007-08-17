@@ -48,6 +48,7 @@ public class Board extends Observable {
 	public static Square int2Square(Board board, int fieldNumber) {
 		int v = fieldNumber % 10;
 		int h = fieldNumber / 10;
+		System.out.println("int2square getting:"+h + v);
 		return board.getSquares().get("" + h + v);
 	}
 
@@ -242,18 +243,22 @@ public class Board extends Observable {
 		 * use the getReason method to determin why.
 		 */
 		/** TODO implement method * */
+		/* mdch :This method should be implemented for when a move comes in from our opponent.
+		 * We ourself will not use this method as our PieceMoveCommand's do the same and is better design.
+		 * We should also make PieceMoveCommands in here. Ask mdch for more info or look at PieceMoveCommand.
+		 * */
 		
-		if(source == destination){
-			return true;
-		}
-		Piece piece = source.getOccupier();
-		destination.setOccupier(piece);
-		if(piece!=null){
-			piece.setSquare(destination);
-		}
-		source.setOccupier(null);
-		setChanged();
-		notifyObservers();
+//		if(source == destination){
+//			return true;
+//		}
+//		Piece piece = source.getOccupier();
+//		destination.setOccupier(piece);
+//		if(piece!=null){
+//			piece.setSquare(destination);
+//		}
+//		source.setOccupier(null);
+//		setChanged();
+//		notifyObservers();
 		return true;
 	}
 
@@ -344,7 +349,7 @@ public class Board extends Observable {
 		return result;
 	}
 
-	public Set<Square> getSquaresAbove(Square start) {
+	public Set<Square> getSquaresBelow(Square start) {
 		Set<Square> result = new TreeSet<Square>();
 		int h = start.getNumber() / 10;// get the horizontal number
 		int v = start.getNumber() % 10;
@@ -366,6 +371,32 @@ public class Board extends Observable {
 		return result;
 	}
 
+	public Set<Square> getSquaresAbove(Square start) {
+		Set<Square> result = new TreeSet<Square>();
+		int h = start.getNumber() / 10;// get the horizontal number
+		int v = start.getNumber() % 10;
+		v++;// add one to start above the start square
+		CHECKABOVE:
+		for (; v < MAXVERTICAL; v++) {
+			Square square = Board.int2Square(this, h * 10 + v);
+			SquareState state = getSquareState(square, start);
+			switch (state) {
+			case BAD:
+				System.out.println("bad "+square);
+				break CHECKABOVE; // break out of the loop!
+			case GOOD:
+				System.out.println("good "+square);
+				result.add(square);
+				break;
+			case GOOD_BUT_LAST_ONE:
+				System.out.println("good but last "+square);
+				result.add(square);
+				return result;
+			}
+		}
+		return result;
+	}
+	
 	public Set<Square> getSquaresRightOf(Square start) {
 		Set<Square> result = new TreeSet<Square>();
 		int h = start.getNumber() / 10;// get the horizontal number
