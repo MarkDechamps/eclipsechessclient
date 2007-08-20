@@ -40,5 +40,15 @@ public class PieceMoveCommand extends Command {
 		newSquare.setOccupier(piece);
 	}
 	
+	@Override
+	public void undo() {
+		newSquare.clear();
+		piece.setSquare(oldSquare);
+		oldSquare.setOccupier(piece);
+	}
 	
+	@Override
+	public boolean canUndo() {
+		return true;
+	}
 }

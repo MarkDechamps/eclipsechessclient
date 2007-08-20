@@ -125,11 +125,19 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 	}
 
 	private Point getLocationFor(int number) {
-
-		int multiplier = getSizeForSquare().width;
-		int x = ((number / 10)) * multiplier;
-		int y = (Board.MAXVERTICAL - (number % 10) - 1) * multiplier;
 		Board board = (Board) getModel();
+		boolean whiteOnTop = board.isWhiteOnTop();
+		int multiplier = getSizeForSquare().width;
+		int x=0,y=0;
+		if(!whiteOnTop){
+			x = ((number / 10)) * multiplier;
+			y = (Board.MAXVERTICAL - (number % 10) - 1) * multiplier;
+		}else{
+			x = (Board.MAXHORIZONTAL - (number / 10)-1) * multiplier;
+			y = ((number % 10)) * multiplier;
+		}
+		
+		/* add the offset to the location of the board */
 		x += board.getLocation().x;
 		y += board.getLocation().y;
 		Point location = new Point(x, y);
