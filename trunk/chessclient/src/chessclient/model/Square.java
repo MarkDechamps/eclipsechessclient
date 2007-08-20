@@ -118,21 +118,20 @@ public class Square extends Observable implements Comparable{
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} else if (!name.equals(other.name))
+		} else if (!name.equals(other.name)){
 			return false;
+		}
+			
 		return true;
 	}
 
 	public int compareTo(Object arg0) {
-		if(arg0 == null){
-			return 0;
-		}
-		
 		if(arg0 instanceof Square){
 			Square other = (Square)arg0;
 			if(other.getNumber()> getNumber())return 1;
+			else if(other.getNumber()== getNumber())return 0;
 		}
 		
-		return 0;
+		return -1;
 	}
 }

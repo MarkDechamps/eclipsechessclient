@@ -11,7 +11,14 @@ public class Queen extends Piece {
 
 	@Override
 	public Set<Square> getPossibleMoves() {
-		return null;
+		Board board = getBoard(); 
+		Square square = getSquare();
+		Set<Square> result = board.getSquaresAbove(square);
+		result.addAll(board.getSquaresLeftOf(square));
+		result.addAll(board.getSquaresRightOf(square));
+		result.addAll(board.getSquaresUnder(square));
+		result.addAll(board.getDiagonals(square));
+		return result;
 	}
 
 }

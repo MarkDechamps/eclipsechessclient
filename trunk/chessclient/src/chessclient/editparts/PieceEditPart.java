@@ -1,6 +1,5 @@
 package chessclient.editparts;
 
-import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ImageFigure;
 import org.eclipse.gef.EditPart;
@@ -8,7 +7,6 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.jface.resource.ImageRegistry;
 
 import chessclient.Activator;
-import chessclient.PieceImagePaths;
 import chessclient.editpolicies.PieceEditPolicy;
 import chessclient.model.Piece;
 

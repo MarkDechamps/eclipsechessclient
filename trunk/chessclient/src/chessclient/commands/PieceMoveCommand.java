@@ -1,5 +1,7 @@
 package chessclient.commands;
 
+import java.util.Set;
+
 import org.eclipse.gef.commands.Command;
 
 import chessclient.model.Piece;
@@ -27,7 +29,9 @@ public class PieceMoveCommand extends Command {
 			return false;
 		}
 		
-		if(piece.getPossibleMoves().contains(newSquare)){
+		Set<Square> moves = piece.getPossibleMoves();
+		if(moves.contains(newSquare)){
+			System.out.println("Piecemovecommand "+newSquare+" possible:"+moves);
 			return true;
 		}else
 			return false;
