@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.VerifyKeyListener;
@@ -120,10 +121,18 @@ public class Console extends ViewPart {
 				if (e.character == '\n' || e.character == '\r') {
 					System.out.println("Console verifyText()");
 					List<String> data = input.getInput();
-					data.add(text.getText());
-					System.out.println(text.getText());
+					//data.add(text.getText());
+					data.add(0, text.getText());
+					//System.out.println(text.getText());
 					input.setInput(data);
 					viewer.setContentProvider(input);
+					viewer.setComparator(new ViewerComparator(){
+						@Override
+						public int compare(Viewer viewer, Object e1, Object e2) {
+							// TODO Auto-generated method stub
+							return 1;
+						}
+					});
 					text.setText("");
 
 				}
