@@ -44,17 +44,8 @@ public class Board extends Observable {
 	private Dimension size;
 
 	private Point location;
-
-	public static Square int2Square(Board board, int fieldNumber) {
-		int v = fieldNumber % 10;
-		int h = fieldNumber / 10;
-		
-		/* we add 1 to v because chess boards don't start counting at 0*/
-		Square result =  board.getSquares().get("" + ((char)('a'+h)) + (v+1));
-		//System.out.println("int2square "+result);
-		return result;
-	}
-
+	private boolean whiteOnTop = true;
+	
 	public Board() {
 		
 		location = new Point(0,0);
@@ -218,6 +209,12 @@ public class Board extends Observable {
 
 	public boolean isCheck() {
 		/** TODO implement method * */
+		// for the color who's move it is,
+		//for the king, check the 'knight squares' around them for enemy knights
+		//check the diagonals for enemy queens and bishops
+		//check the hor and ver squares for enemy rooks and queens
+		//check for pawn attacks
+		
 		return false;
 	}
 
@@ -233,10 +230,10 @@ public class Board extends Observable {
 		return turn;
 	}
 
-	public List<Square> getValidMoves(Square squareOfBoard) {
-		/** TODO implement method * */
-		return new ArrayList<Square>();
-	}
+//	public List<Square> getValidMoves(Square squareOfBoard) {
+//		/** TODO implement method * */
+//		return new ArrayList<Square>();
+//	}
 
 	public boolean addMove(Square source, Square destination) {
 		/*
@@ -382,18 +379,18 @@ public class Board extends Observable {
 		CHECKABOVE:
 		for (; v < MAXVERTICAL; v++) {
 			Square square = Board.int2Square(this, h * 10 + v);
-			System.out.println("board getsquaresabove "+v);
+			//System.out.println("board getsquaresabove "+v);
 			SquareState state = getSquareState(square, start);
 			switch (state) {
 			case BAD:
-				System.out.println("bad "+square);
+				//System.out.println("bad "+square);
 				break CHECKABOVE; // break out of the loop!
 			case GOOD:// a good valid square
 				System.out.println("good "+square);
 				result.add(square);
 				break;
 			case GOOD_BUT_LAST_ONE: // this means there is a piece on that square
-				System.out.println("good but last "+square);
+				//System.out.println("good but last "+square);
 				result.add(square);
 				
 				return result;
@@ -485,6 +482,26 @@ public class Board extends Observable {
 	public Point getLocation() {
 		
 		return location;
+	}
+
+	public boolean isWhiteOnTop() {
+		return whiteOnTop;
+	}
+
+	public void setWhiteOnTop(boolean whiteOnTop) {
+		this.whiteOnTop = whiteOnTop;
+		setChanged();
+		notifyObservers();
+	}
+
+	public static Square int2Square(Board board, int fieldNumber) {
+		int v = fieldNumber % 10;
+		int h = fieldNumber / 10;
+		
+		/* we add 1 to v because chess boards don't start counting at 0*/
+		Square result =  board.getSquares().get("" + ((char)('a'+h)) + (v+1));
+		//System.out.println("int2square "+result);
+		return result;
 	}
 
 }

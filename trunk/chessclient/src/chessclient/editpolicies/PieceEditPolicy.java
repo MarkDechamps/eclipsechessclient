@@ -1,28 +1,41 @@
 package chessclient.editpolicies;
 
-import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.ImageFigure;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.editpolicies.NonResizableEditPolicy;
+import org.eclipse.gef.handles.NonResizableHandleKit;
+import org.eclipse.jface.resource.ImageRegistry;
+
+import chessclient.Activator;
 import chessclient.model.Piece;
 
 public class PieceEditPolicy extends
 /* XYLayoutEditPolicy */NonResizableEditPolicy implements EditPolicy {
 
-	// IFigure feedbackFigure = null;
 
+	
+	@Override
+	protected List createSelectionHandles() {
+		List list = new ArrayList();
+		NonResizableHandleKit.addMoveHandle((GraphicalEditPart)getHost(), list);
+		return list;
+	}
+	
 	@Override
 	protected IFigure createDragSourceFeedbackFigure() {
-
-		IFigure feedbackFigure = new Label(getHost().getModel().toString());
+		ImageRegistry registry = Activator.getDefault().getImageRegistry();
+		Piece piece = (Piece)getHost().getModel();
+		IFigure feedbackFigure = new ImageFigure(registry.get(piece.getImageName()));
 		feedbackFigure.setSize(((Piece) getHost().getModel()).getSize());
-		// feedbackFigure.setBackgroundColor(ColorConstants.black);
-		feedbackFigure.setForegroundColor(ColorConstants.blue);
 		feedbackFigure.setVisible(true);
-		feedbackFigure.setOpaque(true);
+		feedbackFigure.setOpaque(false);
 		addFeedback(feedbackFigure);
 		return feedbackFigure;
+		
 	}
 }

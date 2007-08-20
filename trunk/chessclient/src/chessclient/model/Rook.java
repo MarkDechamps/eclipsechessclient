@@ -1,11 +1,13 @@
 package chessclient.model;
 
 import java.util.Set;
+import static chessclient.PieceImagePaths.*;
 
 public class Rook extends Piece {
 
 	Rook(Board board, Square location,boolean isWhite) {
 		super(board, location,isWhite,"R");
+		setImageName(isWhite?WROOK:BROOK);
 	}
 
 	@Override

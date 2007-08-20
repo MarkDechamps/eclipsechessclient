@@ -13,7 +13,8 @@ public abstract class Piece {
 	private Square square;
 	private Square startSquare;
 	private String notation = "";
-
+	private String imageName = "";
+	
 	/* information for the graphical location/size */
 	private Point location;
 
@@ -121,4 +122,36 @@ public abstract class Piece {
 		this.startSquare = startSquare;
 	}
 
+	public String getImageName() {
+		return imageName;
+	}
+
+	protected void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+	
+	protected boolean canGoTo(Square square){
+		/* same square?*/
+		if(square == getSquare()){
+			return true;
+		}
+		
+		/*is our own king now in check ? */
+		if(board.isCheck()){
+			System.out.println("Are we in check? to implement");
+		}
+		
+		/* empty square ?*/
+		if(square.isEmpty()){
+			return true;
+		}
+		
+		/* an enemy piece ?*/
+		if(square.getOccupier() != null  && square.getOccupier().isWhite() == isWhite()){
+			return true;
+		}
+		
+		
+		return false;
+	}
 }

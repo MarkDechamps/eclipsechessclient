@@ -22,6 +22,9 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.VerifyKeyListener;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -107,35 +110,59 @@ public class Console extends ViewPart {
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		ConsoleInput input = new ConsoleInput();
+		final ConsoleInput input = new ConsoleInput();
+		final Text text = new Text(parent, SWT.SINGLE);
+		text.addKeyListener(new KeyListener() {
+
+			public void keyPressed(KeyEvent e) {
+
+				System.out.println(e.character + " " + (int) e.character);
+				if (e.character == '\n' || e.character == '\r') {
+					System.out.println("Console verifyText()");
+					List<String> data = input.getInput();
+					data.add(text.getText());
+					System.out.println(text.getText());
+					input.setInput(data);
+					viewer.setContentProvider(input);
+					text.setText("");
+
+				}
+			}
+
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		text.addVerifyListener(new org.eclipse.swt.events.VerifyListener() {
+			public void verifyText(org.eclipse.swt.events.VerifyEvent e) {
+
+			}
+
+		});
+
 		List<String> data = new ArrayList<String>();
 		data.add("Some guy says: hello there");
 		data.add("Some other guy says: chess is cool");
 		data.add("Some third guy says: yes, but Mark is cooler");
 		data.add("Some fourth guy says: I agree");
-		data.add("Some third guys says: All input of the console should come in here");
-		data.add("Some third guys says: checkout ConsoleInput, that is the ContentProvider");
+		data
+				.add("Some third guys says: All input of the console should come in here");
+		data
+				.add("Some third guys says: checkout ConsoleInput, that is the ContentProvider");
 		input.setInput(data);
-		
-//		ListViewer l = new ListViewer(parent);
-//		l.setContentProvider(input);
-//		l.setInput(getViewSite());
-//		l.setLabelProvider(new ViewLabelProvider());
-//		
-		Text text = new Text(parent,SWT.MULTI);
-		
+
 		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		//viewer.setContentProvider(new ViewContentProvider());
-		
+
 		viewer.setContentProvider(input);
 		viewer.setLabelProvider(new ViewLabelProvider());
 		viewer.setSorter(new NameSorter());
 		viewer.setInput(getViewSite());
-		//makeActions();
-		//hookContextMenu();
-		//hookDoubleClickAction();
-		//contributeToActionBars();
+		// makeActions();
+		// hookContextMenu();
+		// hookDoubleClickAction();
+		// contributeToActionBars();
 	}
 
 	private void hookContextMenu() {
@@ -224,4 +251,4 @@ public class Console extends ViewPart {
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
-}  //  @jve:decl-index=0:visual-constraint="10,10,853,380"
+} // @jve:decl-index=0:visual-constraint="10,10,853,380"
