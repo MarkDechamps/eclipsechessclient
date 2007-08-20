@@ -14,8 +14,10 @@ public class Bishop extends Piece {
 
 	@Override
 	public Set<Square> getPossibleMoves() {
-		// TODO Auto-generated method stub
-		return null;
+		Board board = getBoard(); 
+		Square square = getSquare();
+		Set<Square> result = board.getDiagonals(square);
+		return result;
 	}
 
 }

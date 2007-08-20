@@ -44,12 +44,13 @@ public class Board extends Observable {
 	private Dimension size;
 
 	private Point location;
-	private boolean whiteOnTop = true;
-	
+
+	private boolean whiteOnTop = false;
+
 	public Board() {
-		
-		location = new Point(0,0);
-		size = new Dimension(500,500);
+
+		location = new Point(0, 0);
+		size = new Dimension(500, 500);
 		/* create the board */
 		for (int h = 0; h < MAXHORIZONTAL; h++) {
 			for (int v = 0; v < MAXVERTICAL; v++) {
@@ -57,7 +58,7 @@ public class Board extends Observable {
 				// System.out.println(s);
 				boolean isWhite = (h + v) % 2 == 1;
 				int number = h * 10 + v;
-				Square square = new Square(isWhite, s, number);				
+				Square square = new Square(isWhite, s, number);
 				squares.put(s, square);
 			}
 		}
@@ -67,7 +68,7 @@ public class Board extends Observable {
 
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		for (int v = MAXVERTICAL-1; v>-1; v--) {
+		for (int v = MAXVERTICAL - 1; v > -1; v--) {
 			for (int h = 0; h < MAXHORIZONTAL; h++) {
 				String s = "" + (char) ('a' + h) + (v + 1);
 				Square square = squares.get(s);
@@ -97,7 +98,7 @@ public class Board extends Observable {
 		for (int h = 0; h < MAXHORIZONTAL; h++) {
 			for (int v = 0; v < MAXVERTICAL; v++) {
 				String s = "" + (char) ('a' + h) + (v + 1);
-				Square square = squares.get(s);				
+				Square square = squares.get(s);
 				square.clear();
 			}
 		}
@@ -210,11 +211,11 @@ public class Board extends Observable {
 	public boolean isCheck() {
 		/** TODO implement method * */
 		// for the color who's move it is,
-		//for the king, check the 'knight squares' around them for enemy knights
-		//check the diagonals for enemy queens and bishops
-		//check the hor and ver squares for enemy rooks and queens
-		//check for pawn attacks
-		
+		// for the king, check the 'knight squares' around them for enemy
+		// knights
+		// check the diagonals for enemy queens and bishops
+		// check the hor and ver squares for enemy rooks and queens
+		// check for pawn attacks
 		return false;
 	}
 
@@ -230,10 +231,10 @@ public class Board extends Observable {
 		return turn;
 	}
 
-//	public List<Square> getValidMoves(Square squareOfBoard) {
-//		/** TODO implement method * */
-//		return new ArrayList<Square>();
-//	}
+	// public List<Square> getValidMoves(Square squareOfBoard) {
+	// /** TODO implement method * */
+	// return new ArrayList<Square>();
+	// }
 
 	public boolean addMove(Square source, Square destination) {
 		/*
@@ -243,22 +244,25 @@ public class Board extends Observable {
 		 * use the getReason method to determin why.
 		 */
 		/** TODO implement method * */
-		/* mdch :This method should be implemented for when a move comes in from our opponent.
-		 * We ourself will not use this method as our PieceMoveCommand's do the same and is better design.
-		 * We should also make PieceMoveCommands in here. Ask mdch for more info or look at PieceMoveCommand.
-		 * */
-		
-//		if(source == destination){
-//			return true;
-//		}
-//		Piece piece = source.getOccupier();
-//		destination.setOccupier(piece);
-//		if(piece!=null){
-//			piece.setSquare(destination);
-//		}
-//		source.setOccupier(null);
-//		setChanged();
-//		notifyObservers();
+		/*
+		 * mdch :This method should be implemented for when a move comes in from
+		 * our opponent. We ourself will not use this method as our
+		 * PieceMoveCommand's do the same and is better design. We should also
+		 * make PieceMoveCommands in here. Ask mdch for more info or look at
+		 * PieceMoveCommand.
+		 */
+
+		// if(source == destination){
+		// return true;
+		// }
+		// Piece piece = source.getOccupier();
+		// destination.setOccupier(piece);
+		// if(piece!=null){
+		// piece.setSquare(destination);
+		// }
+		// source.setOccupier(null);
+		// setChanged();
+		// notifyObservers();
 		return true;
 	}
 
@@ -322,6 +326,88 @@ public class Board extends Observable {
 		System.out.println(this.toString());
 	}
 
+	public Set<Square> getDiagonals(Square start) {
+		Set<Square> result = new TreeSet<Square>();
+		int h = start.getNumber() / 10;// get the horizontal number
+		int v = start.getNumber() % 10;
+
+		int vc = v; // the vertical counter
+		int hc = h;
+		vc++;
+		hc++;
+		/* Right Down */
+		RIGHTDOWN: for (; vc < MAXVERTICAL && hc < MAXHORIZONTAL; vc++, hc++) {
+			Square square = Board.int2Square(this, hc * 10 + vc);
+			SquareState state = getSquareState(square, start);
+			switch (state) {
+			case BAD:
+				break RIGHTDOWN;// jump out of this loop
+			case GOOD:
+				result.add(square);
+				break;
+			case GOOD_BUT_LAST_ONE:
+				result.add(square);
+				break RIGHTDOWN;// jump out of this loop
+			}
+		}
+
+		vc = v;
+		hc = h;
+		vc++;
+		hc--;
+		/* Left Down */
+		LEFTDOWN: for (; vc < MAXVERTICAL && hc > -1; vc++, hc--) {
+			Square square = Board.int2Square(this, hc * 10 + vc);
+			SquareState state = getSquareState(square, start);
+			switch (state) {
+			case BAD:
+				break LEFTDOWN;
+			case GOOD:
+				result.add(square);
+				break;
+			case GOOD_BUT_LAST_ONE:
+				result.add(square);
+				break LEFTDOWN;
+			}
+		}
+
+		vc = v;
+		hc = h;
+		vc--;
+		hc--;
+		/* Left Up */
+		LEFTUP: for (; vc > -1 && hc > -1; vc--, hc--) {
+			Square square = Board.int2Square(this, hc * 10 + vc);
+			SquareState state = getSquareState(square, start);
+			switch (state) {
+			case BAD:
+				break LEFTUP;
+			case GOOD:
+				result.add(square);
+				break;
+			case GOOD_BUT_LAST_ONE:
+				result.add(square);
+				break LEFTUP;
+			}
+		}
+		RIGHTUP: 
+		for (; vc > -1 && hc< MAXHORIZONTAL; vc--, hc++) {
+			Square square = Board.int2Square(this, hc * 10 + vc);
+			SquareState state = getSquareState(square, start);
+			switch (state) {
+			case BAD:
+				break RIGHTUP;
+			case GOOD:
+				result.add(square);
+				break;
+			case GOOD_BUT_LAST_ONE:
+				result.add(square);
+				break RIGHTUP;
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * Helper methods for Rooks and Queens
 	 * 
@@ -331,8 +417,8 @@ public class Board extends Observable {
 		Set<Square> result = new TreeSet<Square>();
 		int h = start.getNumber() / 10;// get the horizontal number
 		int v = start.getNumber() % 10;
-		v++;// add one to start under the square
-		for (; v < MAXVERTICAL; v++) {
+		v--;// add one to start under the square
+		for (; v >-1; v--) {
 			Square square = Board.int2Square(this, h * 10 + v);
 			SquareState state = getSquareState(square, start);
 			switch (state) {
@@ -349,57 +435,36 @@ public class Board extends Observable {
 		return result;
 	}
 
-	public Set<Square> getSquaresBelow(Square start) {
-		Set<Square> result = new TreeSet<Square>();
-		int h = start.getNumber() / 10;// get the horizontal number
-		int v = start.getNumber() % 10;
-		v--;// subtract one to start above the start square
-		for (; v > 0; v--) {
-			Square square = Board.int2Square(this, h * 10 + v);
-			SquareState state = getSquareState(square, start);
-			switch (state) {
-			case BAD:
-				continue;
-			case GOOD:
-				result.add(square);
-				break;
-			case GOOD_BUT_LAST_ONE:
-				result.add(square);
-				return result;
-			}
-		}
-		return result;
-	}
+
 
 	public Set<Square> getSquaresAbove(Square start) {
 		Set<Square> result = new TreeSet<Square>();
 		int h = start.getNumber() / 10;// get the horizontal number
 		int v = start.getNumber() % 10;
 		v++;// add one to start above the start square
-		CHECKABOVE:
-		for (; v < MAXVERTICAL; v++) {
+		CHECKABOVE: for (; v < MAXVERTICAL; v++) {
 			Square square = Board.int2Square(this, h * 10 + v);
-			//System.out.println("board getsquaresabove "+v);
+			// System.out.println("board getsquaresabove "+v);
 			SquareState state = getSquareState(square, start);
 			switch (state) {
 			case BAD:
-				//System.out.println("bad "+square);
 				break CHECKABOVE; // break out of the loop!
 			case GOOD:// a good valid square
-				System.out.println("good "+square);
+				System.out.println("good " + square);
 				result.add(square);
 				break;
-			case GOOD_BUT_LAST_ONE: // this means there is a piece on that square
-				//System.out.println("good but last "+square);
+			case GOOD_BUT_LAST_ONE: // this means there is a piece on that
+									// square
+				// System.out.println("good but last "+square);
 				result.add(square);
-				
+
 				return result;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	public Set<Square> getSquaresRightOf(Square start) {
 		Set<Square> result = new TreeSet<Square>();
 		int h = start.getNumber() / 10;// get the horizontal number
@@ -427,12 +492,12 @@ public class Board extends Observable {
 		int h = start.getNumber() / 10;// get the horizontal number
 		int v = start.getNumber() % 10;
 		h--;// start left of the start square
-		for (; h > 0; h--) {
+		for (; h > -1; h--) {
 			Square square = Board.int2Square(this, h * 10 + v);
 			SquareState state = getSquareState(square, start);
 			switch (state) {
 			case BAD:
-				continue;
+				return result;
 			case GOOD:
 				result.add(square);
 				break;
@@ -449,6 +514,7 @@ public class Board extends Observable {
 		 * source can never be empty, its the square with the piece on who is
 		 * checking its moves
 		 */
+		//System.out.println("Board checkin "+destination);
 		if (destination != null) {
 			if (destination.isEmpty()) {
 				return SquareState.GOOD;
@@ -457,15 +523,17 @@ public class Board extends Observable {
 				// king, it can be taken
 				// so it is a possible field
 				Piece piece = destination.getOccupier();
-				
-				if (piece!=null && (piece.isWhite() == source.getOccupier().isWhite())
+
+				if (piece != null
+						&& (piece.isWhite() == source.getOccupier().isWhite())
 						|| piece instanceof King) {
-					// it's one of ours or its a king and we don't take kings..no we don't!
-					System.out.println("Board bad square "+piece+" "+source.getOccupier());
+					// it's one of ours or its a king and we don't take
+					// kings..no we don't!
 					return SquareState.BAD;
 				} else {
 					// its an opponents piece. If it is not his king, its a
 					// valid square but we should stop there then
+					System.out.println("good but last one!"+destination);
 					return SquareState.GOOD_BUT_LAST_ONE;
 				}
 			}
@@ -480,7 +548,7 @@ public class Board extends Observable {
 	}
 
 	public Point getLocation() {
-		
+
 		return location;
 	}
 
@@ -497,10 +565,11 @@ public class Board extends Observable {
 	public static Square int2Square(Board board, int fieldNumber) {
 		int v = fieldNumber % 10;
 		int h = fieldNumber / 10;
-		
-		/* we add 1 to v because chess boards don't start counting at 0*/
-		Square result =  board.getSquares().get("" + ((char)('a'+h)) + (v+1));
-		//System.out.println("int2square "+result);
+
+		/* we add 1 to v because chess boards don't start counting at 0 */
+		Square result = board.getSquares().get(
+				"" + ((char) ('a' + h)) + (v + 1));
+		// System.out.println("int2square "+result);
 		return result;
 	}
 
