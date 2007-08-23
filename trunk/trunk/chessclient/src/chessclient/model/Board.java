@@ -390,6 +390,11 @@ public class Board extends Observable {
 				break LEFTUP;
 			}
 		}
+		
+		vc = v;
+		hc = h;
+		vc--;
+		hc++;
 		RIGHTUP: 
 		for (; vc > -1 && hc< MAXHORIZONTAL; vc--, hc++) {
 			Square square = Board.int2Square(this, hc * 10 + vc);
