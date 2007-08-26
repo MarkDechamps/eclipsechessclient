@@ -4,9 +4,11 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 
 import chessclient.editparts.BoardEditPart;
+import chessclient.editparts.ClockEditPart;
 import chessclient.editparts.PieceEditPart;
 import chessclient.editparts.SquareEditPart;
 import chessclient.model.Board;
+import chessclient.model.Clock;
 import chessclient.model.Piece;
 import chessclient.model.Square;
 
@@ -33,7 +35,13 @@ public class BoardEditPartFactory implements EditPartFactory {
 			EditPart ep = new PieceEditPart();
 			ep.setModel(model);
 			return ep;
-		}else{
+		}
+		if(model instanceof Clock){
+			EditPart ep = new ClockEditPart();
+			ep.setModel(model);
+			return ep;
+		}
+		else{
 			System.out.println("BoardEditPartFactory has no editpart for:"+model);
 		}
 		

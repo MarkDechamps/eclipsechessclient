@@ -15,15 +15,14 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.XYLayoutEditPolicy;
 import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.gef.requests.SelectionRequest;
 
 import chessclient.model.Board;
+import chessclient.model.Clock;
 import chessclient.model.Square;
 
 public class BoardEditPart extends AbstractGraphicalEditPart implements
@@ -103,7 +102,7 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 		Board b = (Board) getModel();
 		Map<String, Square> squares = b.getSquares();
 		Collection<Square> squaresCollection = squares.values();
-		List<Square> result = new ArrayList<Square>();
+		List result = new ArrayList();
 
 		for (Square s : squaresCollection) {
 			result.add(s);
@@ -111,6 +110,25 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 			s.setSize(getSizeForSquare());
 		}
 
+		Clock whiteClock = new Clock(true);
+		Clock blackClock = new Clock(false);
+		Point top = new Point(500,20);
+		Point bottom = new Point(500,Board.MAXVERTICAL* getSizeForSquare().width - 50);
+		if(b.isWhiteOnTop()){
+			whiteClock.setLocation(top);
+			blackClock.setLocation(bottom);
+		}else{
+			whiteClock.setLocation(bottom);
+			blackClock.setLocation(top);
+		}
+		
+		whiteClock.calculateSize();
+		Dimension clockSize = whiteClock.getSize();
+		whiteClock.setSize(clockSize);
+		blackClock.setSize(clockSize);
+		
+		result.add(whiteClock);
+		result.add(blackClock);
 		return result;
 	}
 
