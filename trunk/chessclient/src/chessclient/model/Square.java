@@ -27,6 +27,8 @@ public class Square extends Observable implements Comparable{
 
 	public void setSize(Dimension size) {
 		this.size = size;
+		setChanged();
+		notifyObservers();
 	}
 
 	public Point getLocation() {
@@ -89,8 +91,10 @@ public class Square extends Observable implements Comparable{
 		return getOccupier() == null;
 	}
 
-	public void setLocation(Point locationFor) {
+	public void setLocation(Point locationFor) {		
 		this.location = locationFor;
+		setChanged();
+		notifyObservers();
 
 	}
 

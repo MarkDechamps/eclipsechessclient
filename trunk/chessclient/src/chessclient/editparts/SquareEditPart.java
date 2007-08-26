@@ -7,8 +7,6 @@ import java.util.Observer;
 
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.MouseEvent;
-import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.XYLayout;
 import org.eclipse.gef.EditPart;
@@ -22,7 +20,7 @@ import chessclient.model.Piece;
 import chessclient.model.Square;
 
 public class SquareEditPart extends AbstractGraphicalEditPart implements
-		EditPart, Observer {
+		EditPart, Observer{
 
 	IFigure figure;
 
@@ -34,8 +32,17 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 
 	@Override
 	protected IFigure createFigure() {
-		Square square = (Square) getModel();
+		
 		RectangleFigure rf = new RectangleFigure();
+		initSquare(rf);
+		rf.setLayoutManager(new XYLayout());
+		figure = rf;
+		return rf;
+	}
+
+	private void initSquare(IFigure rf){
+		Square square = (Square) getModel();
+		square.addObserver(this);
 		rf.setSize(square.getSize());
 		rf.setLocation(square.getLocation());
 		rf.setOpaque(true);
@@ -45,11 +52,8 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 				: ColorConstants.yellow;
 
 		rf.setBackgroundColor(background);
-		rf.setLayoutManager(new XYLayout());
-		figure = rf;
-		return rf;
 	}
-
+	
 	@Override
 	protected void createEditPolicies() {
 
@@ -129,28 +133,20 @@ public class SquareEditPart extends AbstractGraphicalEditPart implements
 	}
 
 	public void update(Observable arg0, Object arg1) {
-		//System.out.println("SquareEditpart does update");
+		Square s = (Square)getModel();
+		System.out.println("SquareEditpart does update "+getModel()+s.getSize());
 		//getParent().refresh();
 		
 		refresh();
 		
 	}
-	
-	@Override
-	protected void refreshVisuals() {
-		
-		//List<AbstractEditPart> l = getChildren();
-		//refresh();
-		
-		
-	}
 
-//	public boolean isMoveMade() {
-//		return moveMade;
-//	}
-//
-//	public void setMoveMade(boolean moveMade) {
-//		this.moveMade = moveMade;
+//	@Override
+//	public void refresh() {
+//		Square square = (Square)getModel();
+//		System.out.println("update squareeditpart"+square+" "+square.getSize());
+//		initSquare(getFigure());
+//		super.refresh();
 //	}
 
 }
