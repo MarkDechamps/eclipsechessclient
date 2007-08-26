@@ -51,6 +51,13 @@ public class Board extends Observable {
 
 		location = new Point(0, 0);
 		size = new Dimension(500, 500);
+		createBoard(location, size);
+		
+		/* put the pieces on */
+		resetBoard();
+	}
+
+	private void createBoard(Point location, Dimension size){
 		/* create the board */
 		for (int h = 0; h < MAXHORIZONTAL; h++) {
 			for (int v = 0; v < MAXVERTICAL; v++) {
@@ -62,10 +69,8 @@ public class Board extends Observable {
 				squares.put(s, square);
 			}
 		}
-		/* put the pieces on */
-		resetBoard();
 	}
-
+	
 	public String toString() {
 		StringBuilder result = new StringBuilder();
 		for (int v = MAXVERTICAL - 1; v > -1; v--) {
@@ -231,10 +236,7 @@ public class Board extends Observable {
 		return turn;
 	}
 
-	// public List<Square> getValidMoves(Square squareOfBoard) {
-	// /** TODO implement method * */
-	// return new ArrayList<Square>();
-	// }
+
 
 	public boolean addMove(Square source, Square destination) {
 		/*
@@ -576,6 +578,16 @@ public class Board extends Observable {
 				"" + ((char) ('a' + h)) + (v + 1));
 		// System.out.println("int2square "+result);
 		return result;
+	}
+
+	public void setSize(org.eclipse.swt.graphics.Point newSize) {
+		int w = newSize.x;
+		int h = newSize.y;
+		int side = w<h?w:h;
+		this.size = new Dimension(side,side);
+		createBoard(location, this.size);
+		setChanged();
+		notifyObservers();
 	}
 
 }
