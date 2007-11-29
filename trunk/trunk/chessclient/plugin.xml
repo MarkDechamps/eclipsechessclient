@@ -35,5 +35,12 @@
                relative="org.eclipse.ui.views.TaskList"/>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="chessclient.properties.ConnectionPreferences"
+            id="chessclient.connection"
+            name="chessclient.connection"/>
+   </extension>
 
 </plugin>
