@@ -252,6 +252,7 @@ public class Board extends Observable {
 		 * PieceMoveCommand's do the same and is better design. We should also
 		 * make PieceMoveCommands in here. Ask mdch for more info or look at
 		 * PieceMoveCommand.
+		 * Another option is let the parser create a piecemovecommand self
 		 */
 
 		// if(source == destination){

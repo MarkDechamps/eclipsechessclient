@@ -102,7 +102,7 @@ public class BoardEditPart extends AbstractGraphicalEditPart implements
 		Board b = (Board) getModel();
 		Map<String, Square> squares = b.getSquares();
 		Collection<Square> squaresCollection = squares.values();
-		List result = new ArrayList();
+		List<Object> result = new ArrayList<Object>();
 
 		for (Square s : squaresCollection) {
 			result.add(s);
