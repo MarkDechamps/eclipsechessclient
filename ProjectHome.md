@@ -1,0 +1,1 @@
+Chess client for FICS on linux,windows etc.
